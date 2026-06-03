@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <title>EchoDraft — Open Graph share card</title>
+  <!--
+    Standard OG / Twitter card dimensions: 1200×630 (1.91:1 aspect).
+    Renders correctly on Slack, WhatsApp, iMessage, Twitter, LinkedIn,
+    Discord, Telegram, and any platform that follows the OG spec.
+
+    Composition: brand mark + wordmark in the upper-third, headline
+    below, soft brass-glow vignette top-left to echo the app's icon
+    background gradient.
+  -->
+
+  <!-- Warm-dark surface, matches site bg (#0E0E10) and adaptive-icon
+       background (#15110D average). -->
+  <defs>
+    <radialGradient id="vignette" cx="22%" cy="28%" r="80%">
+      <stop offset="0%" stop-color="#3A2A1C" stop-opacity="0.55"/>
+      <stop offset="55%" stop-color="#15110D" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#0E0E10"/>
+  <rect width="1200" height="630" fill="url(#vignette)"/>
+
+  <!-- Brand mark — 80px tall, top-left of the safe inner area.
+       Mark geometry mirrors src/ui/Mark.tsx rest state. -->
+  <g transform="translate(96 88) scale(0.8)">
+    <g transform="translate(5.5 0)">
+      <rect x="14" y="22" width="5" height="56" rx="1" fill="#ECECEE"/>
+      <rect x="34" y="28" width="5" height="44" rx="1" fill="#E8A87C" opacity="0.78"/>
+      <rect x="52" y="34" width="5" height="32" rx="1" fill="#E8A87C" opacity="0.45"/>
+      <rect x="70" y="40" width="5" height="20" rx="1" fill="#E8A87C" opacity="0.22"/>
+    </g>
+  </g>
+
+  <!-- Wordmark: "Echo" Newsreader 500 / "Draft" Newsreader italic brass.
+       Hand-rendered as text so the SVG is self-contained (no external
+       font dependency for the render). Falls back to system serif if
+       Newsreader doesn't load — shape stays close enough. -->
+  <text x="190" y="142"
+        font-family="Newsreader, Georgia, 'Times New Roman', serif"
+        font-size="44" font-weight="500" letter-spacing="-0.5"
+        fill="#ECECEE">Echo<tspan font-style="italic" font-weight="400" fill="#E8A87C">Draft</tspan></text>
+
+  <!-- Headline — same wording as the landing page hero. Italic brass
+       on the third line is the brand's signature emphasis move. -->
+  <text x="96" y="312"
+        font-family="Newsreader, Georgia, serif"
+        font-size="82" font-weight="500" letter-spacing="-2.5"
+        fill="#ECECEE">Talk it out.</text>
+  <text x="96" y="402"
+        font-family="Newsreader, Georgia, serif"
+        font-size="82" font-weight="500" letter-spacing="-2.5"
+        fill="#ECECEE">Read it back as</text>
+  <text x="96" y="492"
+        font-family="Newsreader, Georgia, serif"
+        font-style="italic" font-size="82" font-weight="400"
+        letter-spacing="-2.5"
+        fill="#E8A87C">something you'd publish.</text>
+
+  <!-- Footer label — mono affordance, matches the chip in the site nav. -->
+  <text x="96" y="570"
+        font-family="ui-monospace, 'IBM Plex Mono', SFMono-Regular, Menlo, monospace"
+        font-size="20" letter-spacing="3.5"
+        fill="rgba(236,236,238,0.42)">PRIVATE BETA · ANDROID</text>
+</svg>

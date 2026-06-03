@@ -7,9 +7,31 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta name="theme-color" content="#0E0E10">
 <meta name="description" content="EchoDraft is a private writing companion for Android. Talk it out; the patient editor reads it back as something you'd publish. Private beta.">
+
+<!--
+  Open Graph + Twitter card meta. Drives the rich preview when someone
+  shares the URL on Slack, WhatsApp, iMessage, Twitter, LinkedIn, Discord.
+
+  IMPORTANT: replace the absolute URL in og:url + og:image + twitter:image
+  with your actual live URL. Twitter specifically requires absolute URLs
+  (not relative paths) for the preview image to resolve. Once you point
+  echodraft.app at this Vercel project, swap the .vercel.app domain for
+  echodraft.app in all three places.
+-->
 <meta property="og:title" content="EchoDraft — Talk it out. Read it back as something you'd publish.">
-<meta property="og:description" content="A patient editor who carries a notebook. Private beta · Android.">
+<meta property="og:description" content="A patient editor who carries a notebook. Speak the half-thought; a draft you'd keep arrives. Private beta · Android.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://echodraft-beta.vercel.app/">
+<meta property="og:image" content="https://echodraft-beta.vercel.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="EchoDraft — Talk it out. Read it back as something you'd publish.">
+<meta property="og:site_name" content="EchoDraft">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="EchoDraft — Talk it out. Read it back as something you'd publish.">
+<meta name="twitter:description" content="A patient editor who carries a notebook. Private beta · Android.">
+<meta name="twitter:image" content="https://echodraft-beta.vercel.app/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
