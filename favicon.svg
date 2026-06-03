@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32">
+  <title>EchoDraft — Favicon</title>
+  
+  <g transform="translate(14.5 0)">
+    <rect x="14" y="22" width="6" height="56" rx="1" fill="#ECEAE5"></rect>
+    <rect x="34" y="28" width="6" height="44" rx="1" fill="#E8A87C" opacity="0.78"></rect>
+    <rect x="52" y="34" width="6" height="32" rx="1" fill="#E8A87C" opacity="0.45"></rect>
+  </g>
+</svg>
