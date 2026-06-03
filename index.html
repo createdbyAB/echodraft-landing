@@ -99,8 +99,35 @@
   /* hero: LIVING DRAFT — the only hero */
   .hero-living{display:block}
 
-  /* ── HERO: LIVING DRAFT ── */
-  .hero-living .hero-grid{display:flex;flex-direction:column;align-items:center;text-align:center;min-height:78vh;justify-content:center;padding:80px 0 96px;gap:0}
+  /* ── HERO INTRO (above the animation) ──
+     Explicit framing: brand mark + sub-label, the headline, a short
+     descriptive paragraph. Sits above the living-draft animation so
+     visitors know what they're seeing before the demo plays. */
+  .hero-intro{
+    padding:96px 0 24px;
+    display:flex;flex-direction:column;align-items:center;text-align:center;
+    gap:22px;
+  }
+  .hero-intro-eyebrow{
+    display:flex;align-items:center;gap:10px;
+    font-family:var(--mono);font-size:11.5px;font-weight:500;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--paper-3);
+  }
+  .hero-intro-h{
+    max-width:18ch;
+    /* Slightly smaller than the centered-hero default — leaves vertical
+       room for the animation below to breathe. */
+    font-size:calc(64px*var(--type-scale));line-height:1.04;
+  }
+  .hero-intro-sub{
+    font-family:var(--serif);font-size:19px;line-height:1.55;
+    color:var(--paper-2);max-width:50ch;
+  }
+
+  /* ── HERO: LIVING DRAFT ──
+     Now sits beneath the intro, so the band can be shorter and the
+     animation reads as proof of the headline above (not a riddle). */
+  .hero-living .hero-grid{display:flex;flex-direction:column;align-items:center;text-align:center;min-height:auto;justify-content:center;padding:8px 0 96px;gap:0}
   .living-stage{width:100%;max-width:760px;display:flex;flex-direction:column;align-items:center}
   .living-mark{margin-bottom:30px}
   .living-eyebrow{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);height:14px;transition:opacity .5s ease}
@@ -259,7 +286,10 @@
     :root{--margin:48px}
     .wrap{padding:0 48px}
     h1.hero-h{font-size:calc(54px*var(--type-scale))}
-    .hero-living .hero-grid{min-height:72vh;padding:56px 0 72px}
+    .hero-intro{padding:64px 0 16px;gap:18px}
+    .hero-intro-h{font-size:calc(48px*var(--type-scale))}
+    .hero-intro-sub{font-size:17px}
+    .hero-living .hero-grid{min-height:auto;padding:8px 0 72px}
     .living-raw{font-size:24px}
     .living-draft p{font-size:26px}
   }
@@ -268,8 +298,11 @@
     .wrap{padding:0 20px}
     .nav-in{height:64px}
     h1.hero-h{font-size:calc(40px*var(--type-scale));line-height:1.06}
+    .hero-intro{padding:48px 0 12px;gap:16px}
+    .hero-intro-h{font-size:calc(36px*var(--type-scale))}
+    .hero-intro-sub{font-size:16px}
     .hero-lead{font-size:18px}
-    .hero-living .hero-grid{min-height:68vh}
+    .hero-living .hero-grid{min-height:auto;padding:4px 0 60px}
     .living-raw{font-size:21px}
     .living-textwrap{min-height:168px}
     .living-draft p{font-size:23px}
@@ -320,10 +353,38 @@
 <section class="hero" id="top">
   <div class="wrap">
 
+    <!-- Explicit headline + sub above the animation. Tells the visitor
+         what the app is before the show-don't-tell sequence below it
+         plays out — animation then reads as proof of the claim, not as
+         a riddle. -->
+    <div class="hero-intro">
+      <div class="hero-intro-eyebrow">
+        <svg class="mark" width="22" height="22" viewBox="0 0 100 100">
+          <rect class="lead" x="19.5" y="22" width="5" height="56" rx="1" fill="#ECECEE"/>
+          <rect x="39.5" y="28" width="5" height="44" rx="1" fill="#E8A87C" opacity="0.78"/>
+          <rect x="57.5" y="34" width="5" height="32" rx="1" fill="#E8A87C" opacity="0.45"/>
+          <rect x="75.5" y="40" width="5" height="20" rx="1" fill="#E8A87C" opacity="0.22"/>
+        </svg>
+        <span>A voice-to-draft writing app for Android</span>
+      </div>
+      <h1 class="hero-h hero-intro-h">
+        Talk it out.<br>
+        Read it back as <em class="b">something you'd publish.</em>
+      </h1>
+      <p class="hero-intro-sub">
+        Speak the half-thought. A patient reader asks one or two quiet
+        questions. A draft you'd keep arrives — shaped, paragraphed, in
+        a voice that still sounds like yours.
+      </p>
+    </div>
+
     <div class="hero-living">
       <div class="hero-grid">
         <div class="living-stage">
-          <svg class="mark living-mark" width="40" height="40" viewBox="0 0 100 100">
+          <!-- Bigger pulsing mark — anchors the "we're capturing voice
+               right now" cue. Smaller mark sits in the intro eyebrow
+               above as the brand affordance; this one is functional. -->
+          <svg class="mark living-mark" width="34" height="34" viewBox="0 0 100 100">
             <rect class="lead" x="19.5" y="22" width="5" height="56" rx="1" fill="#ECECEE"/>
             <rect x="39.5" y="28" width="5" height="44" rx="1" fill="#E8A87C" opacity="0.78"/>
             <rect x="57.5" y="34" width="5" height="32" rx="1" fill="#E8A87C" opacity="0.45"/>
@@ -477,53 +538,20 @@
   </div>
 </section>
 
-<!-- ═══════════ WHAT IT COSTS ═══════════ -->
-<section class="band" data-screen-label="Pricing">
-  <div class="wrap">
-    <div class="sec-head"><span class="sec-num">04</span><span class="eyebrow">What it costs</span></div>
-    <h2 class="sec-h" style="margin-bottom:48px">Free to start. <em>Honest about the rest.</em></h2>
-    <div class="tiers">
-      <div class="tier">
-        <span class="tname">Free</span>
-        <div class="price">$0<span class="per"> / forever</span></div>
-        <p class="tdesc">A small library to see if it fits the way you think.</p>
-        <ul class="tlist">
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>10 drafts a month</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>The patient reader, in full</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Resets on the first</li>
-        </ul>
-      </div>
-      <div class="tier feature">
-        <span class="tname">Monthly</span>
-        <div class="price">$5<span class="per"> / month</span></div>
-        <p class="tdesc">For when talking it out becomes how you write.</p>
-        <ul class="tlist">
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Unlimited drafts</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Keep the audio with each draft</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Cancel anytime</li>
-        </ul>
-      </div>
-      <div class="tier">
-        <span class="tname">Annual <em>· best value</em></span>
-        <div class="price">$40<span class="per"> / year</span></div>
-        <p class="tdesc">Two months on the house, for the regulars.</p>
-        <ul class="tlist">
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Everything in Monthly</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>~$3.33 a month, billed yearly</li>
-          <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Priority on beta feedback</li>
-        </ul>
-      </div>
-    </div>
-    <p class="why-cost">It costs because it costs us. Every draft runs real AI compute — listening, reasoning, writing it back. The price is the smallest number that keeps the lights on <em>without selling what you said.</em></p>
-  </div>
-</section>
+<!--
+  PRICING SECTION (04 · "What it costs") REMOVED for the public beta.
+  Stripe is still in test/sandbox mode — we can't actually charge real
+  cards yet. Showing prices on the live landing page would be misleading.
+  Add this section back when we flip Stripe to live mode (full HTML
+  preserved in git history at commit before this removal — easy revert).
+-->
 
 <!-- ═══════════ THIS IS A BETA ═══════════ -->
 <section class="band raised" data-screen-label="Beta">
   <div class="wrap">
     <div class="beta">
       <div>
-        <div class="sec-head"><span class="sec-num">05</span><span class="eyebrow">This is a beta</span></div>
+        <div class="sec-head"><span class="sec-num">04</span><span class="eyebrow">This is a beta</span></div>
         <h2 class="sec-h">Early, on purpose. <em>Honest about it.</em></h2>
         <div class="body" style="margin-top:28px">
           <p>EchoDraft is in private beta. Most of it works the way it should; some of it will surprise us both. You're here early because you talk things out before you can write them down — and because you'll tell us when something feels off.</p>
