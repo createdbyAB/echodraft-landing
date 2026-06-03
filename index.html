@@ -155,10 +155,21 @@
   .living-eyebrow{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);height:14px;transition:opacity .5s ease}
   .living-eyebrow .cur{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--brass);margin-left:6px;transform:translateY(-1px);animation:dotpulse 1.05s steps(1,end) infinite}
   @keyframes dotpulse{0%,52%{opacity:1}60%,100%{opacity:.25}}
-  .living-textwrap{position:relative;width:100%;margin-top:34px;min-height:200px;display:flex;align-items:center;justify-content:center}
-  .living-raw{font-family:var(--serif);font-style:italic;font-size:28px;line-height:1.5;color:var(--paper-3);max-width:32ch;transition:opacity .6s ease,filter .6s ease}
-  .living-raw.gone{opacity:0;filter:blur(6px)}
-  .living-raw .tc{display:inline-block;width:2px;height:.95em;background:var(--brass);transform:translateY(4px);margin-left:3px;animation:dotpulse 1.05s steps(1,end) infinite}
+  .living-textwrap{position:relative;width:100%;margin-top:34px;min-height:280px;display:flex;align-items:center;justify-content:center}
+  /* Conversation stack — fills the textwrap; turns appear top-to-bottom
+     as the animation plays out. All blur out together when the draft
+     resolves. */
+  .living-convo{display:flex;flex-direction:column;align-items:center;gap:18px;max-width:36ch;transition:opacity .6s ease,filter .6s ease}
+  .living-convo.gone{opacity:0;filter:blur(6px)}
+  /* User voice — dim italic paper, exactly what someone speaking sounds
+     like in text form. Smaller than the original raw style so two turns
+     fit comfortably. */
+  .living-voice{font-family:var(--serif);font-style:italic;font-size:22px;line-height:1.45;color:var(--paper-3);text-align:center}
+  .living-voice .tc{display:inline-block;width:2px;height:.95em;background:var(--brass);transform:translateY(4px);margin-left:3px;animation:dotpulse 1.05s steps(1,end) infinite}
+  /* Reader's question — italic brass, the brand accent. Visually marks
+     it as the AI's contribution, distinct from the dim user voice. */
+  .living-question{font-family:var(--serif);font-style:italic;font-size:22px;line-height:1.45;color:var(--brass);text-align:center;opacity:0;transform:translateY(6px);transition:opacity .55s ease,transform .55s ease}
+  .living-question.show{opacity:1;transform:none}
   .living-draft{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;pointer-events:none}
   .living-draft p{font-family:var(--serif);font-size:30px;line-height:1.34;letter-spacing:-.01em;color:var(--paper);max-width:30ch;margin:0;opacity:0;transform:translateY(10px);transition:opacity .7s ease,transform .7s ease}
   .living-draft p em{font-style:italic;color:var(--brass);font-weight:400}
@@ -312,7 +323,8 @@
     .hero-intro-h{font-size:calc(48px*var(--type-scale))}
     .hero-intro-sub{font-size:17px}
     .hero-living .hero-grid{min-height:auto;padding:8px 0 72px}
-    .living-raw{font-size:24px}
+    .living-voice,.living-question{font-size:20px}
+    .living-textwrap{min-height:240px}
     .living-draft p{font-size:26px}
   }
   @media (max-width:600px){
@@ -325,8 +337,8 @@
     .hero-intro-sub{font-size:16px}
     .hero-lead{font-size:18px}
     .hero-living .hero-grid{min-height:auto;padding:4px 0 60px}
-    .living-raw{font-size:21px}
-    .living-textwrap{min-height:168px}
+    .living-voice,.living-question{font-size:18px}
+    .living-textwrap{min-height:220px}
     .living-draft p{font-size:23px}
     .phone{width:262px}
     .living-cta .btn{width:100%}
@@ -413,10 +425,17 @@
           </svg>
           <div class="living-eyebrow" id="living-eyebrow">Listening<span class="cur"></span></div>
           <div class="living-textwrap">
-            <div class="living-raw" id="living-raw" aria-hidden="true"></div>
+            <!-- Conversation stack: user voice → reader's question → user
+                 answers. Each turn appears in sequence, then all blur out
+                 and the resolved draft fades in. -->
+            <div class="living-convo" id="living-convo">
+              <div class="living-voice" id="living-voice-1" aria-hidden="true"></div>
+              <div class="living-question" id="living-question" aria-hidden="true"></div>
+              <div class="living-voice" id="living-voice-2" aria-hidden="true"></div>
+            </div>
             <div class="living-draft" id="living-draft">
-              <p>It was a long week. I never finished.</p>
-              <p>By Friday my to-do list was one thing. Three <em>small arrows</em> pointed back at it.</p>
+              <p>We're building an app for people who think on walks.</p>
+              <p>You talk; it writes. So the idea doesn't die <em>between the sidewalk and your desk</em>.</p>
             </div>
           </div>
           <div class="living-cta" id="living-cta">
@@ -602,8 +621,11 @@
 <script>
 (function(){
   "use strict";
-  var raw = document.getElementById('living-raw');
-  if(!raw) return;
+  var convo = document.getElementById('living-convo');
+  if(!convo) return;
+  var v1 = document.getElementById('living-voice-1');
+  var v2 = document.getElementById('living-voice-2');
+  var q  = document.getElementById('living-question');
   var draft = document.getElementById('living-draft');
   var cta = document.getElementById('living-cta');
   var eyebrow = document.getElementById('living-eyebrow');
@@ -612,45 +634,83 @@
   var timers = [];
   function T(fn,ms){ timers.push(setTimeout(fn,ms)); }
   function clearAll(){ timers.forEach(clearTimeout); timers=[]; }
+  function setEyebrow(text){ eyebrow.innerHTML = text + '<span class="cur"></span>'; }
 
-  // hesitant spoken-aloud cadence — {s:type} {p:pause ms} {d:delete n}
-  var ops = [
-    {s:"i had this\u2026 "},{p:360},
-    {s:"long week, "},{p:200},
-    {s:"and i never finished it"},{p:280},
-    {s:", you know?"},{p:440},
-    {s:" by friday i just kept"},{p:260},
-    {s:" circling one thing."}
+  // Two voice turns + one reader's question between them. Hesitant
+  // spoken cadence: {s:type} {p:pause ms}.
+  var voice1Ops = [
+    {s:"so what we're building is, "},{p:280},
+    {s:"um, an app where you talk and "},{p:200},
+    {s:"it writes for you, basically"}
   ];
+  var voice2Ops = [
+    {s:"people who think on walks \u2014 "},{p:300},
+    {s:"by the time they sit down, "},{p:180},
+    {s:"the idea's gone"}
+  ];
+  // The reader's question \u2014 appears all at once (the AI responds; it
+  // doesn't pretend to "type"). Brass color flagged via .living-question.
+  var questionText = "What problem are you actually solving?";
 
   function showFinal(){
-    raw.classList.add('gone'); eyebrow.style.opacity='0';
+    convo.classList.add('gone'); eyebrow.style.opacity='0';
     draft.classList.add('show'); cta.classList.add('show'); hint.classList.add('show');
   }
 
-  window.startLiving = function(){
-    clearAll();
-    if(reduce){ showFinal(); return; }
-    raw.classList.remove('gone'); raw.innerHTML='';
-    draft.classList.remove('show'); cta.classList.remove('show'); hint.classList.remove('show');
-    eyebrow.style.opacity='1'; eyebrow.innerHTML='Listening<span class="cur"></span>';
-    var txt='', t=450;
-    function render(){ raw.innerHTML = txt.replace(/</g,'&lt;') + '<span class="tc"></span>'; }
-    render();
+  // Schedule a typing sequence into `el`, advancing the `t` cursor.
+  // Returns the new `t` after the sequence finishes typing.
+  function typeInto(el, ops, t){
+    var txt = '';
+    function render(){ el.innerHTML = txt.replace(/</g,'&lt;') + '<span class="tc"></span>'; }
+    T(function(){ render(); }, t);
     ops.forEach(function(op){
       if(op.s){
         for(var i=0;i<op.s.length;i++){
           (function(ch){ T(function(){ txt+=ch; render(); }, t); })(op.s[i]);
           t += 24 + Math.random()*30;
         }
-      } else if(op.d){
-        for(var j=0;j<op.d;j++){ T(function(){ txt=txt.slice(0,-1); render(); }, t); t+=24; }
       } else if(op.p){ t += op.p; }
     });
-    T(function(){ eyebrow.innerHTML='Reading what you said.'; }, t+260);
-    T(function(){ raw.classList.add('gone'); }, t+820);
-    T(function(){ eyebrow.style.opacity='0'; draft.classList.add('show'); }, t+1280);
-    T(function(){ cta.classList.add('show'); hint.classList.add('show'); }, t+2300);
+    // Strip the typing cursor once this turn finishes \u2014 only the
+    // currently-typing turn should show a blinking cursor.
+    T(function(){ el.innerHTML = txt.replace(/</g,'&lt;'); }, t);
+    return t;
+  }
+
+  window.startLiving = function(){
+    clearAll();
+    if(reduce){ showFinal(); return; }
+
+    // Reset every element to start state.
+    convo.classList.remove('gone');
+    v1.innerHTML=''; v2.innerHTML=''; q.textContent = questionText;
+    q.classList.remove('show');
+    draft.classList.remove('show'); cta.classList.remove('show'); hint.classList.remove('show');
+    eyebrow.style.opacity='1'; setEyebrow('Listening');
+
+    var t = 450;
+
+    // Turn 1: seed thought
+    t = typeInto(v1, voice1Ops, t);
+    t += 480;  // beat after voice 1
+
+    // Eyebrow flips, then question fades in (brass italic).
+    T(function(){ setEyebrow('Reading what you said.'); }, t);
+    t += 600;
+    T(function(){ q.classList.add('show'); }, t);
+    t += 1500;  // give the reader time to read the question
+
+    // Eyebrow back to "Listening", user answers.
+    T(function(){ setEyebrow('Listening'); }, t);
+    t += 240;
+    t = typeInto(v2, voice2Ops, t);
+    t += 520;  // beat after voice 2
+
+    // Resolve: blur convo, draft fades in, then CTA + scroll hint.
+    T(function(){ setEyebrow('Reading what you said.'); }, t);
+    T(function(){ convo.classList.add('gone'); }, t + 560);
+    T(function(){ eyebrow.style.opacity='0'; draft.classList.add('show'); }, t + 1100);
+    T(function(){ cta.classList.add('show'); hint.classList.add('show'); }, t + 2100);
   };
 
   function maybeStart(){ if(document.body.getAttribute('data-hero')==='living'){ T(window.startLiving, 350); } }
