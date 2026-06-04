@@ -176,12 +176,12 @@
   .living-draft.show{pointer-events:auto}
   .living-draft.show p{opacity:1;transform:none}
   .living-draft.show p:nth-child(2){transition-delay:.55s}
-  .living-cta{margin-top:48px;display:flex;flex-direction:column;align-items:center;gap:18px;opacity:0;transform:translateY(8px);transition:opacity .7s ease,transform .7s ease}
-  .living-cta.show{opacity:1;transform:none}
-  .living-cta .hero-meta{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;color:var(--paper-3)}
-  .living-cta .hero-meta b{color:var(--paper-2);font-weight:500}
-  .living-scrollhint{margin-top:10px;font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--paper-3);opacity:0;transition:opacity .7s ease}
-  .living-scrollhint.show{opacity:.7}
+  /* CTA block in the hero intro — visible from page load so visitors
+     don't have to wait for the demo animation below to finish before
+     they can download. */
+  .hero-intro-cta{margin-top:14px;display:flex;flex-direction:column;align-items:center;gap:14px}
+  .hero-intro-cta .hero-meta{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;color:var(--paper-3)}
+  .hero-intro-cta .hero-meta b{color:var(--paper-2);font-weight:500}
 
   /* ── PHONE ── */
   .phone{width:296px;flex:0 0 auto;background:var(--bg-deep);border:1px solid var(--divider);border-radius:40px;padding:7px;box-shadow:0 40px 80px -34px rgba(0,0,0,.85),0 0 0 1px rgba(255,255,255,.02)}
@@ -409,6 +409,17 @@
         Say what you want to write. EchoDraft asks a question or two,
         then writes a clean draft you can share.
       </p>
+
+      <!-- CTA sits ABOVE the animation so visitors don't have to wait
+           for the demo to finish before they can act. The animation
+           below is supporting evidence, not a paywall. -->
+      <div class="hero-intro-cta">
+        <a class="btn btn-primary" href="https://github.com/createdbyAB/echodraft-landing/releases/download/v0.2.0/echodraft-v0.2.0.apk" id="download-cta" download>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
+          Download for Android
+        </a>
+        <span class="hero-meta"><b>v0.2.0</b> · Android 8+</span>
+      </div>
     </div>
 
     <div class="hero-living">
@@ -438,20 +449,8 @@
               <p>You talk; it writes. So the idea doesn't die <em>between the sidewalk and your desk</em>.</p>
             </div>
           </div>
-          <div class="living-cta" id="living-cta">
-            <!--
-              Download URL points at the latest GitHub Release. When you
-              cut v0.3.0, swap the two v0.2.0 occurrences in this href
-              and also update the version meta + install card filename
-              below. See README.md → "Cutting a beta release".
-            -->
-            <a class="btn btn-primary" href="https://github.com/createdbyAB/echodraft-landing/releases/download/v0.2.0/echodraft-v0.2.0.apk" id="download-cta" download>
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M5 21h14"/></svg>
-              Download for Android
-            </a>
-            <span class="hero-meta"><b>v0.2.0</b> · Android 8+</span>
-            <span class="living-scrollhint" id="living-hint">Scroll · the rest is quieter</span>
-          </div>
+          <!-- CTA + meta now live in .hero-intro above; the scroll hint
+               was removed since the upfront CTA makes it redundant. -->
         </div>
       </div>
     </div>
@@ -627,9 +626,7 @@
   var v2 = document.getElementById('living-voice-2');
   var q  = document.getElementById('living-question');
   var draft = document.getElementById('living-draft');
-  var cta = document.getElementById('living-cta');
   var eyebrow = document.getElementById('living-eyebrow');
-  var hint = document.getElementById('living-hint');
   var reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   var timers = [];
   function T(fn,ms){ timers.push(setTimeout(fn,ms)); }
@@ -654,7 +651,7 @@
 
   function showFinal(){
     convo.classList.add('gone'); eyebrow.style.opacity='0';
-    draft.classList.add('show'); cta.classList.add('show'); hint.classList.add('show');
+    draft.classList.add('show');
   }
 
   // Schedule a typing sequence into `el`, advancing the `t` cursor.
@@ -685,7 +682,7 @@
     convo.classList.remove('gone');
     v1.innerHTML=''; v2.innerHTML=''; q.textContent = questionText;
     q.classList.remove('show');
-    draft.classList.remove('show'); cta.classList.remove('show'); hint.classList.remove('show');
+    draft.classList.remove('show');
     eyebrow.style.opacity='1'; setEyebrow('Listening');
 
     var t = 450;
@@ -706,11 +703,11 @@
     t = typeInto(v2, voice2Ops, t);
     t += 520;  // beat after voice 2
 
-    // Resolve: blur convo, draft fades in, then CTA + scroll hint.
+    // Resolve: blur convo, draft fades in. CTA is already visible
+    // above (in .hero-intro-cta) — no fade-up needed.
     T(function(){ setEyebrow('Reading what you said.'); }, t);
     T(function(){ convo.classList.add('gone'); }, t + 560);
     T(function(){ eyebrow.style.opacity='0'; draft.classList.add('show'); }, t + 1100);
-    T(function(){ cta.classList.add('show'); hint.classList.add('show'); }, t + 2100);
   };
 
   function maybeStart(){ if(document.body.getAttribute('data-hero')==='living'){ T(window.startLiving, 350); } }
