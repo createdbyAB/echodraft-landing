@@ -1,7 +1,7 @@
 # echodraft-landing
 
-Beta-tester landing page for EchoDraft. Single static HTML file
-implemented from the **Claude Design** handoff (`EchoDraft Landing.html` —
+Beta-tester landing page for Echoes. Single static HTML file
+implemented from the **Claude Design** handoff (`Echoes Landing.html` —
 "living draft" hero direction). No framework, no build step, no JS
 dependencies. Inline `<style>`; a small `<script>` runs the typing→draft
 hero animation on load.
@@ -31,7 +31,7 @@ echodraft-landing/
 7. **04 · What it costs** — Free / $5 monthly (featured) / $40 annual tiers
    with a "without selling what you said" closing note.
 8. **05 · This is a beta** — honesty + "If something breaks, send" card
-   with `hello@echodraft.app` mailto.
+   with `hello@tryechoes.app` mailto.
 9. **Footer** — mark, wordmark, contact/privacy/terms.
 
 ---
@@ -67,7 +67,7 @@ git push -u origin main
    `https://echodraft-landing-abc123.vercel.app/`.
 6. In the Vercel project → **Settings → Domains**, click **Edit**
    on the auto-assigned URL and shorten it to something memorable
-   like `echodraft-beta.vercel.app`.
+   like `tryechoes.app`.
 
 That's it — the page is live. Every `git push` to `main` redeploys
 automatically.
@@ -82,7 +82,7 @@ a fallback. To make it actually download the APK:
 ### A. Build the APK
 
 ```bash
-cd "/Users/AB/Design Project👨‍💻/EchoDraft"
+cd "/Users/AB/Design Project👨‍💻/Echoes"
 eas build -p android --profile commercial
 ```
 
@@ -93,7 +93,7 @@ build URL to your laptop.
 
 You need a public-readable home for the APK. Two options:
 
-**Option 1 — Same repo as the app code** (if your EchoDraft app code
+**Option 1 — Same repo as the app code** (if your Echoes app code
 lives in a public GitHub repo). Release files inherit the repo's
 visibility — public repo = public download URL.
 
@@ -106,7 +106,7 @@ In either case, in the chosen repo:
 
 1. GitHub → **Releases → Draft a new release**.
 2. **Tag:** `v0.2.0` (match the `version` in `app.config.ts`).
-3. **Title:** `EchoDraft v0.2.0 — beta`.
+3. **Title:** `Echoes v0.2.0 — beta`.
 4. **Notes:** what changed since the last release (one bullet list).
 5. **Attach the APK:** drag the file from your downloads into the
    "Attach binaries" box. Rename it to `echodraft-v0.2.0.apk` so it
@@ -153,14 +153,14 @@ landing page once and never edit it again on subsequent releases.
 
 ---
 
-## 3. When you buy `echodraft.app` (or another domain)
+## 3. When you buy `tryechoes.app` (or another domain)
 
 1. Buy the domain anywhere (Namecheap, Cloudflare Registrar, Porkbun…).
 2. In Vercel project → **Settings → Domains**, click **Add** and enter
-   `echodraft.app`.
+   `tryechoes.app`.
 3. Vercel shows you the DNS records to add:
-   - For root domain (`echodraft.app`): an **A record** → `76.76.21.21`
-   - For `www.echodraft.app`: a **CNAME** → `cname.vercel-dns.com`
+   - For root domain (`tryechoes.app`): an **A record** → `76.76.21.21`
+   - For `www.tryechoes.app`: a **CNAME** → `cname.vercel-dns.com`
 4. Add those records at your registrar. Propagation: minutes to hours.
 5. Vercel auto-provisions a Let's Encrypt SSL certificate once DNS resolves.
 
@@ -179,7 +179,7 @@ These need to exist before flipping Stripe to live mode:
       Anthropic for drafting), retention, third-party processors.
 - [ ] **Terms of service** at `/terms` — usage rules, subscription
       terms, refund policy.
-- [ ] **Support email** confirmed: `hello@echodraft.app` (currently
+- [ ] **Support email** confirmed: `hello@tryechoes.app` (currently
       live in the page footer + beta card).
 - [ ] **Privacy/Terms links** un-stubbed in the footer of `index.html`
       (they're `href="#"` placeholders right now).
@@ -208,7 +208,7 @@ comments (`<!-- ═══════════ HERO ════════�
 - **Install steps** — search for `class="istep"` (four of them).
 - **Pricing values** — search for `class="tier"` (three of them).
   The featured one has class `tier feature` for the brass border.
-- **Contact email** — search for `mailto:hello@echodraft.app` (two refs).
+- **Contact email** — search for `mailto:hello@tryechoes.app` (two refs).
 - **Brand colors** — `:root` block at the top of the `<style>` defines
   every token. Don't hardcode hex values in markup.
 
