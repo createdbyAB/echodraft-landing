@@ -40,7 +40,7 @@
   <text x="190" y="142"
         font-family="Newsreader, Georgia, 'Times New Roman', serif"
         font-size="44" font-weight="500" letter-spacing="-0.5"
-        fill="#ECECEE">Echo<tspan font-style="italic" font-weight="400" fill="#E8A87C">Draft</tspan></text>
+        fill="#ECECEE">Echo<tspan font-style="italic" font-weight="400" fill="#E8A87C">es</tspan></text>
 
   <!-- Headline — same wording as the landing page hero. Italic brass
        on the third line is the brand's signature emphasis move. -->
@@ -62,5 +62,5 @@
   <text x="96" y="570"
         font-family="ui-monospace, 'IBM Plex Mono', SFMono-Regular, Menlo, monospace"
         font-size="20" letter-spacing="3.5"
-        fill="rgba(236,236,238,0.42)">PRIVATE BETA · ANDROID</text>
+        fill="rgba(236,236,238,0.42)">VOICE TO DRAFT · ANDROID</text>
 </svg>
